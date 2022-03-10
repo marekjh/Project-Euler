@@ -1,4 +1,4 @@
-from problem3 import factorize
+from problem03 import factorize
 
 def find_consecutive():
     count = 0
