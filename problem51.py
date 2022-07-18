@@ -2,7 +2,7 @@ from itertools import combinations
 
 def generate_primes():
     primes = [2, 3]
-    for n in range(5, int(200_000), 2):
+    for n in range(5, 200_000, 2):
         i = 0
         while primes[i] <= int(n ** 0.5):
             if n % primes[i] == 0:
