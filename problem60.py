@@ -2,7 +2,7 @@ from primes import PRIMES, is_prime
 from itertools import combinations
 
 def main():
-    first_primes = sorted(list(PRIMES))[:1000]
+    first_primes = sorted(list(PRIMES))[:1300] #roughly primes less than 10,000
     pairs = {}
 
     for p in sorted(list(PRIMES)):
@@ -30,15 +30,11 @@ def main():
     
     length_five = []
     for groups in [[reduced_pairs[x] for x in y] for y in candidates]:
-        group = intersection(*tuple(groups))
+        group = groups[0].intersection(*tuple(groups[1:]))
         if len(group) == 5:
             length_five.append(group)
 
     print(sum(min(length_five, key=lambda x: sum(x))))
-
-
-def intersection(s1, s2, s3, s4):
-    return s1.intersection(s2, s3, s4)
 
 def are_compatible(p1, p2):
     s1 = str(p1)
