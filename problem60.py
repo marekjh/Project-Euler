@@ -1,6 +1,5 @@
 from primes import PRIMES, is_prime
 from itertools import combinations
-import pickle
 
 def main():
     first_primes = sorted(list(PRIMES))[:1000]
