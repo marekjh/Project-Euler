@@ -1,13 +1,11 @@
 def factorize(num_choice):
     factor_list = []
     divisor_list = []
-    #num_choice = int(input("Choose a number, and the program will print its prime factorization: "))
     factor_find(num_choice, factor_list, divisor_list)
     if num_choice not in factor_list:
         for i in divisor_list:
             factor_find(i, factor_list, divisor_list)
-        factor_list = [int(i) for i in factor_list]
-        return sorted(factor_list)
+        return factor_list
     else:
         return factor_list
 
@@ -25,7 +23,12 @@ def factor_find(dividend, factor_list, divisor_list):
         else:
             divisor += 1
 
-print(factorize(600851475143))
+if __name__ == "__main__":
+    print(factorize(600851475143))
+
+
+
+
 #This unused function was an attempt to print the prime factors
 #in exponential form, but it proved difficult to implement with
 #numerical sorting 
