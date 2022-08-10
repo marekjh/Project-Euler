@@ -1,4 +1,4 @@
-from primes import factorize
+from primes import factorize2
 
 def main():
     N = 1_000_000
@@ -14,8 +14,9 @@ def main():
 
 def phi(n):
     phi = n
-    for p in set(factorize(n)):
+    for p in set(factorize2(n)):
         phi *= (1 - 1 / p)
-    return phi
+    return int(phi)
     
-main()
+if __name__ == "__main__":
+    main()

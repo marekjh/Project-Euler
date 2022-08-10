@@ -35,3 +35,17 @@ def factorize_helper(n, factors):
     return factors + [n]
     
     
+def factorize2(n):
+    factors = []
+    while True:
+        i = 0
+        p = 2
+        while p <= int(n ** 0.5):
+            if n % p == 0:
+                factors.append(p)
+                n //= p
+                break
+            i += 1
+            p = SORTED_PRIMES[i]
+        else:
+            return factors + [n]
