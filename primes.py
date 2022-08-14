@@ -21,7 +21,7 @@ def generate_primes(N):
 def is_prime(n):
     return n in PRIMES
 
-def factorize(n):
+def factorize2(n):
     return factorize_helper(n, [])
 
 def factorize_helper(n, factors):
@@ -35,7 +35,7 @@ def factorize_helper(n, factors):
     return factors + [n]
     
     
-def factorize2(n):
+def factorize(n):
     factors = []
     while True:
         i = 0
