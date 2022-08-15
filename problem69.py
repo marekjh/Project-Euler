@@ -13,6 +13,9 @@ def main():
     print(max_n)
 
 def phi(n):
+    if n == 1:
+        return 1
+        
     phi = n
     for p in set(factorize(n)):
         phi *= (1 - 1 / p)
