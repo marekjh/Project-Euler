@@ -1,8 +1,9 @@
 import pickle
+import numpy as np
 
 with open("primes.pickle", "rb") as f:
     PRIMES = pickle.load(f)
-SORTED_PRIMES = sorted(list(PRIMES))
+SORTED_PRIMES = np.array(sorted(list(PRIMES)))
 
 def generate_primes(N):
     primes = [2, 3]
