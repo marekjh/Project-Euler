@@ -1,7 +1,7 @@
-def digits(N, D):
+def digit_sum(N, D):
     S = 0
     for n in range(2, N+1):
-        if n**0.5 == round(n**0.5):
+        if n**0.5 == int(n**0.5):
             continue
 
         curr = 0
@@ -17,4 +17,4 @@ def digits(N, D):
     
     return S
 
-print(digits(100, 100))
+print(digit_sum(100, 100))

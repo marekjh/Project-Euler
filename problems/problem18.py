@@ -11,7 +11,7 @@ def triangle_constructor(input_file):
     
     return triangle_list
 
-def max_sum(triangle):
+def extreme_sum(triangle, f):
     if len(triangle) == 1:
         return triangle[0][0]
 
@@ -22,15 +22,16 @@ def max_sum(triangle):
     for i in range(len(current_row)):
         left_path = check_row[i]
         right_path = check_row[i + 1]
-        best_path = current_row[i] + max([left_path, right_path])
+        best_path = current_row[i] + f([left_path, right_path])
         replacement_row.append(best_path)
     
     del triangle[-1]
     triangle[-1] = replacement_row
     
-    return max_sum(triangle)
+    return extreme_sum(triangle, f)
             
-input_triangle = triangle_constructor("nums_in_triangle2.txt")
-print(max_sum(input_triangle))
+if __name__ == "__main__":
+    input_triangle = triangle_constructor("../data/nums_in_triangle2.txt")
+    print(extreme_sum(input_triangle, max))
 
 #https://projecteuler.net/problem=18
