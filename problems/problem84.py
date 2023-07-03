@@ -10,13 +10,14 @@ G2J = 30
 C1 = 11
 E3 = 24
 H2 = 39
+R1 = 5
 R = [5, 15, 25, 35]
 U = [12, 28]
 CC = {2, 17, 33}     
 CH = {7, 22, 36} 
 P_CARD = 1/16
 
-DEPTH = 1000
+DEPTH = 10000
 
 def main():
     T = []
@@ -27,8 +28,8 @@ def main():
     v = np.zeros(3*N)
     v[0] = 1
     Tn = np.linalg.matrix_power(T, DEPTH)
-    result = np.dot(v, T)
-    print(condense(result))
+    result = condense(np.dot(v, Tn))
+    print(sorted([x for x in enumerate(result)], key=lambda k: k[1], reverse=True))
 
 def transition(si, di):
     t = []
@@ -45,19 +46,25 @@ def transition(si, di):
             elif diff not in (0, 1):
                 p = 0
             else:
-                p = full[diff][sf]
+                moves = full[diff]
+                if sf in moves:
+                    p = moves[sf]
+                else:
+                    p = 0
             t.append(p)
+    if sum(t) < 0.999:
+        print(sum(t), si, di)
     return t
 
 def full_moveset(roll_moves):
-    full_moves = roll_moves
     for card_type in (CC, CH):
         for move in set(roll_moves).intersection(card_type):
             p = roll_moves[move]
             del roll_moves[move]
-            new_moves = {k: p*v for k, v in card_moveset(move, card_type).items()}
-            full_moves = Counter(roll_moves) + Counter(new_moves)
-    return full_moves
+            card_moves  = card_moveset(move, card_type)
+            new_moves = {k: p*v for k, v in card_moves.items()}
+            roll_moves = Counter(roll_moves) + Counter(new_moves)
+    return roll_moves
 
 def roll_moveset(si):
     moves = spaces(si+3, si+2*D)
@@ -71,19 +78,23 @@ def roll_moveset(si):
         enforce_G2J(m)
     return (m0, m1)
 
-def card_moveset(space, cc):
-    if cc:
+def card_moveset(space, type):
+    if type == CC:
         return {space: 14*P_CARD, GO: P_CARD, JAIL: P_CARD}
-    return {space: 6*P_CARD, GO: P_CARD, JAIL: P_CARD, C1: P_CARD, E3: P_CARD, H2: P_CARD, R[0]: P_CARD, 
+    m = {space: 6*P_CARD, GO: P_CARD, JAIL: P_CARD, C1: P_CARD, E3: P_CARD, H2: P_CARD,
             nearest(R, space): 2*P_CARD, nearest(U, space): P_CARD, space-3: P_CARD}
+    if R1 in m:
+        m[R1] += P_CARD
+    else:
+        m[R1] = P_CARD
+    return m
 
 def condense(arr):
     result = []
     for i in range(N):
         slice = arr[3*i:3*(i+1)]
-        result.append(sum(slice))
+        result.append(round(sum(slice), 5))
     return result
-
 
 def spaces(start, end, step=1):
     return np.array(range(start, end, step)) % N
@@ -91,16 +102,14 @@ def spaces(start, end, step=1):
 def nearest(arr, e):
     for a in arr:
         if a > e:
-            return e
-    return R[0]
+            return a
+    return arr[0]
 
 def enforce_G2J(moves):
     if G2J in moves:
-        if JAIL in moves:
-            moves[JAIL] += moves[G2J]
-        else:
-            moves[JAIL] = moves[G2J]
+        p = moves[G2J]
         del moves[G2J]
+        moves[JAIL] = p
 
 def state(space, doubles):
     return 3*space + doubles
