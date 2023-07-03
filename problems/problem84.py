@@ -2,7 +2,7 @@ import numpy as np
 from collections import Counter
 
 N = 40
-D = 4
+D = 6
 
 GO = 0
 V_JAIL = 10
@@ -18,7 +18,7 @@ CC = {2, 17, 33}
 CH = {7, 22, 36} 
 P_CARD = 1/16
 
-DEPTH = 10000000
+DEPTH = 10_000
 
 def main():
     T = []
@@ -30,10 +30,10 @@ def main():
     v[0] = 1
     Tn = np.linalg.matrix_power(T, DEPTH)
     result = condense(np.dot(v, Tn))
-    ranking = sorted([x for x in enumerate(result)], key=lambda k: k[1], reverse=True)
-    print("".join(2*str(x[0]) if x[0] < 10 else str(x[0]) for x in ranking[:3]))
+    ranking = sorted(enumerate(result), key=lambda k: k[1], reverse=True)
+    # print("".join("0" + str(x[0]) if x[0] < 10 else str(x[0]) for x in ranking[:3]))
     # print(condense(result))
-    # print(sorted([x for x in enumerate(result)], key=lambda k: k[1], reverse=True))
+    print(sorted([x for x in enumerate(result)], key=lambda k: k[1], reverse=True))
 
 def transition(si, di):
     t = []
