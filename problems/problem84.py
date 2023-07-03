@@ -2,10 +2,11 @@ import numpy as np
 from collections import Counter
 
 N = 40
-D = 6
+D = 4
 
 GO = 0
-JAIL = 10
+V_JAIL = 10
+IN_JAIL = 40
 G2J = 30
 C1 = 11
 E3 = 24
@@ -17,7 +18,7 @@ CC = {2, 17, 33}
 CH = {7, 22, 36} 
 P_CARD = 1/16
 
-DEPTH = 10000
+DEPTH = 10000000
 
 def main():
     T = []
@@ -29,31 +30,17 @@ def main():
     v[0] = 1
     Tn = np.linalg.matrix_power(T, DEPTH)
     result = condense(np.dot(v, Tn))
-    print(sorted([x for x in enumerate(result)], key=lambda k: k[1], reverse=True))
+    ranking = sorted([x for x in enumerate(result)], key=lambda k: k[1], reverse=True)
+    print("".join(2*str(x[0]) if x[0] < 10 else str(x[0]) for x in ranking[:3]))
+    # print(condense(result))
+    # print(sorted([x for x in enumerate(result)], key=lambda k: k[1], reverse=True))
 
 def transition(si, di):
     t = []
-    (m0, m1) = roll_moveset(si)
-    full = (full_moveset(m0), full_moveset(m1))
+    m0, m1 = roll_moveset(si)
+    f0, f1 = full_moveset(m0), full_moveset(m1)
     for sf in range(N):
-        for df in range(3):
-            diff = df - di
-            if diff == -2:
-                if sf == JAIL:
-                    p = 1/D
-                else:
-                    p = 0
-            elif diff not in (0, 1):
-                p = 0
-            else:
-                moves = full[diff]
-                if sf in moves:
-                    p = moves[sf]
-                else:
-                    p = 0
-            t.append(p)
-    if sum(t) < 0.999:
-        print(sum(t), si, di)
+        t.extend(to_add(si, di, sf, f0, f1))
     return t
 
 def full_moveset(roll_moves):
@@ -80,14 +67,28 @@ def roll_moveset(si):
 
 def card_moveset(space, type):
     if type == CC:
-        return {space: 14*P_CARD, GO: P_CARD, JAIL: P_CARD}
-    m = {space: 6*P_CARD, GO: P_CARD, JAIL: P_CARD, C1: P_CARD, E3: P_CARD, H2: P_CARD,
+        return {space: 14*P_CARD, GO: P_CARD, IN_JAIL: P_CARD}
+    m = {space: 6*P_CARD, GO: P_CARD, IN_JAIL: P_CARD, C1: P_CARD, E3: P_CARD, H2: P_CARD,
             nearest(R, space): 2*P_CARD, nearest(U, space): P_CARD, space-3: P_CARD}
     if R1 in m:
         m[R1] += P_CARD
     else:
         m[R1] = P_CARD
     return m
+
+def to_add(si, di, sf, m0, m1):
+    p0, p1 = m0.get(sf, 0), m1.get(sf, 0)
+    j0, j1 = m0.get(IN_JAIL, 0), m1.get(IN_JAIL, 0)
+    add_if_jail = [j0+j1, j0+j1, j0+1/D]
+    if di == 0:
+        add = [p0, p1, 0]
+    elif di == 1:
+        add = [p0, 0, p1]
+    else:
+        add = [p0, 0, 0]
+    if sf == V_JAIL:
+        add[0] += add_if_jail[di]
+    return add
 
 def condense(arr):
     result = []
@@ -109,10 +110,7 @@ def enforce_G2J(moves):
     if G2J in moves:
         p = moves[G2J]
         del moves[G2J]
-        moves[JAIL] = p
-
-def state(space, doubles):
-    return 3*space + doubles
+        moves[IN_JAIL] = p
 
 if __name__ == "__main__":
     main()
