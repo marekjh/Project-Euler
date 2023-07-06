@@ -31,7 +31,8 @@ def main():
     Tn = np.linalg.matrix_power(T, DEPTH)
     result = condense(np.dot(v, Tn))
     ranking = sorted(enumerate(result), key=lambda k: k[1], reverse=True)
-    # print("".join("0" + str(x[0]) if x[0] < 10 else str(x[0]) for x in ranking[:3]))
+    
+    print("".join("0" + str(x[0]) if x[0] < 10 else str(x[0]) for x in ranking[:3]))
     # print(condense(result))
     print(sorted([x for x in enumerate(result)], key=lambda k: k[1], reverse=True))
 
@@ -40,7 +41,7 @@ def transition(si, di):
     m0, m1 = roll_moveset(si)
     f0, f1 = full_moveset(m0), full_moveset(m1)
     for sf in range(N):
-        t.extend(to_add(si, di, sf, f0, f1))
+        t.extend(to_add(di, sf, f0, f1))
     return t
 
 def full_moveset(roll_moves):
@@ -76,7 +77,7 @@ def card_moveset(space, type):
         m[R1] = P_CARD
     return m
 
-def to_add(si, di, sf, m0, m1):
+def to_add(di, sf, m0, m1):
     p0, p1 = m0.get(sf, 0), m1.get(sf, 0)
     j0, j1 = m0.get(IN_JAIL, 0), m1.get(IN_JAIL, 0)
     add_if_jail = [j0+j1, j0+j1, j0+1/D]
