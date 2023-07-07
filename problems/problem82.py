@@ -41,11 +41,6 @@ def build_graph(file):
                 n.connect(M[i][j+1])
     return M
 
-def reset(graph):
-    for row in graph:
-        for node in row:
-            node.dist = np.inf
-
 
 class Node():
     def __init__(self, value=0):
@@ -58,9 +53,6 @@ class Node():
     
     def __lt__(self, other):
         return self.dist < other.dist
-    
-    def __repr__(self):
-        return str(self.value)
     
 class Queue():
     def __init__(self):

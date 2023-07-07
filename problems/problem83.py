@@ -25,7 +25,7 @@ def build_graph(file):
     with open(file) as f:
         M = [[int(x) for x in y.split(",")] for y in f.readlines()]
     size = len(M)
-    M = np.array([[Node(e) for e in row] for row in M])
+    M = [[Node(e) for e in row] for row in M]
     for i in range(size):
         for j in range(size):
             n = M[i][j]
@@ -51,9 +51,6 @@ class Node():
     
     def __lt__(self, other):
         return self.dist < other.dist
-    
-    def __repr__(self):
-        return str(self.value)
     
 class Queue():
     def __init__(self):
