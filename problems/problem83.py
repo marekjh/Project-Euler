@@ -46,11 +46,12 @@ class Node():
         self.dist = np.inf
         self.next = []
     
+    def __lt__(self, other):
+        return self.dist < other.dist
+    
     def connect(self, other):
         self.next.append(other)
     
-    def __lt__(self, other):
-        return self.dist < other.dist
     
 class Queue():
     def __init__(self):
