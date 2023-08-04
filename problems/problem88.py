@@ -1,7 +1,6 @@
 from math import prod
-from collections import Counter, OrderedDict
+from collections import Counter
 from numpy import inf
-from timeit import default_timer as timer
 
 M = 12_000
 
