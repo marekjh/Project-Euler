@@ -1,5 +1,4 @@
-from primes import factorize
-from math import prod, floor
+from math import floor
 
 N = 50
 
@@ -12,13 +11,15 @@ def main():
     print(3*N**2 + floor(N**2/2) + 2*interior)
 
 def reduce(a, b):
-    a_factors = factorize(a)
-    b_factors = factorize(b)
-    shared = {x: min(a_factors.count(x), b_factors.count(x)) for x in set(a_factors).intersection(set(b_factors))}
-    for factor, mult in shared.items():
-        for _ in range(mult):
-            a_factors.remove(factor)
-            b_factors.remove(factor)
-    return prod(a_factors), prod(b_factors)
+    shared = gcd(a, b)
+    return a//shared, b//shared
+
+def gcd(x, y):
+    x, y = tuple(sorted([x, y], reverse=True))
+    while y != 0:
+        x, y = y, x % y
+    return x
+
+
 
 main()
