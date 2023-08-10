@@ -29,14 +29,15 @@ class ProductSumNums:
         while self.size() > self.M:
             del self.nums[n]
             if n+1 > x:
-                n = self.lowest() + 1 if len(self.nums) > 0 else n+1
+                n = min(self.nums) + 1 if len(self.nums) > 0 else n+1
                 del self.nums[n-1]
             else:
                 n += 1
             if n > self.M:
                 raise Exception("Cannot be incremented further")
             self.nums += Counter({n:1})
-            x = self.lowest()**self.nums[self.lowest()]
+            lowest = min(self.nums)
+            x = lowest**self.nums[lowest]
             
     def size(self):
         return self.product() - self.sum() + sum(self.nums.values())
@@ -46,8 +47,6 @@ class ProductSumNums:
 
     def sum(self):
         return sum([x*self.nums[x] for x in self.nums])
-    
-    def lowest(self):
-        return sorted(self.nums)[0]
+
 
 main()
