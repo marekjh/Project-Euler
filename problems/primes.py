@@ -50,3 +50,11 @@ def factorize(n):
             p = SORTED_PRIMES[i]
         else:
             return factors + [n]
+        
+def divisors(n):
+    divisors = set()
+    for x in range(1, int(n ** 0.5) + 1):
+        if n % x == 0:
+            divisors.add(x)
+            divisors.add(n // x)
+    return divisors
