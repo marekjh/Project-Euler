@@ -1,16 +1,12 @@
 from copy import copy, deepcopy
 import sys
 
-N = 9  # Should be a square number
+N = 16  # Should be a square number
 M = int(N**0.5)
 
 def main():
-    puzzles = read_file(f"../data/{sys.argv[1]}")
-    total = 0
-    for puzzle in puzzles:
-        sol = solve(set_puzzle(puzzle))
-        total += int(str(list(sol[0][0])[0]) + str(list(sol[0][1])[0]) + str(list(sol[0][2])[0]))
-    print(total)
+    puzzle = read_file(f"../data/{sys.argv[1]}")
+    sol = solve(set_puzzle(puzzle))
     for row in sol:
         print(row)
 
@@ -79,8 +75,8 @@ def hidden_single(puzzle, spaces, grid):
     return updated
 
 def set_puzzle(puzzle):
-    for i in range(len(puzzle)):
-        for j, e in enumerate(puzzle[i]):
+    for i, row in enumerate(puzzle):
+        for j, e in enumerate(row):
             if e:
                 puzzle[i][j] = {e}
             else:
@@ -102,15 +98,9 @@ def split_grid():
     return {"rows": rows, "cols": cols, "blocks": blocks}
 
 def read_file(file):
-    out = []
     with open(file, "r") as f:
         lines = [x.strip() for x in f.readlines()]
-    for n in range(1, len(lines)//10 + 1):
-        lines.remove(f"Grid {'0' + str(n) if n < 10 else n}")
-    lines = [[int(x) for x in list(y)] for y in lines]
-    for i in range(0, len(lines), 9):
-        out.append(lines[i:i+9])
-    return out
+    return [[10 + ord(x) - ord("a") if x.isalpha() else int(x) for x in list(y)] for y in lines]
  
 class NoSolution(Exception):
     pass
