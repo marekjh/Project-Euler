@@ -1,18 +1,18 @@
 from copy import copy, deepcopy
+import sys
 
 N = 9  # Should be a square number
 M = int(N**0.5)
 
 def main():
-    puzzles = read_file("../data/p096_sudoku.txt")
+    puzzles = read_file(f"../data/{sys.argv[1]}")
     total = 0
-    count = 0
     for puzzle in puzzles:
-        count += 1
-        print(count)
         sol = solve(set_puzzle(puzzle))
         total += int(str(list(sol[0][0])[0]) + str(list(sol[0][1])[0]) + str(list(sol[0][2])[0]))
     print(total)
+    for row in sol:
+        print(row)
 
 def solve(puzzle):
     remaining = set()
