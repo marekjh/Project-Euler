@@ -1,7 +1,7 @@
 from copy import copy, deepcopy
 import sys
 
-N = 16  # Should be a square number
+N = 9  # Should be a square number
 M = int(N**0.5)
 
 def main():
