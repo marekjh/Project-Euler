@@ -5,7 +5,11 @@ N = 9  # Should be a square number
 M = int(N**0.5)
 
 def main():
-    puzzle = read_file(f"../data/{sys.argv[1]}")
+    if len(sys.argv) < 2:
+        print("Supply path to grid")
+        return
+    
+    puzzle = read_file(sys.argv[1])
     sol = solve(set_puzzle(puzzle))
     for row in sol:
         print(row)
